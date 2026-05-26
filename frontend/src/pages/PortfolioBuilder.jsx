@@ -104,7 +104,7 @@ savedPortfolio || {
       const response =
       await axios.post(
 
-"http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/upload-resume",
+"https://portfolio-builder-jxjx.onrender.com/api/portfolio/upload-resume",
 
         formData
       );
@@ -187,7 +187,7 @@ savedPortfolio?._id
 
         await axios.put(
 
-`http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/update/${savedPortfolio._id}`,
+`https://portfolio-builder-jxjx.onrender.com/api/portfolio/update/${savedPortfolio._id}`,
 
           portfolioData
         );
@@ -201,7 +201,7 @@ savedPortfolio?._id
         // CREATE
         await axios.post(
 
-"http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/save",
+"https://portfolio-builder-jxjx.onrender.com/api/portfolio/save",
 
           portfolioData
         );

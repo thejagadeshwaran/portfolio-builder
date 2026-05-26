@@ -356,7 +356,7 @@ upload.single(
     .json({
 
 resumeUrl:
-`http://https://portfolio-builder-jxjx.onrender.com//uploads/${req.file.filename}`
+`https://portfolio-builder-jxjx.onrender.com//uploads/${req.file.filename}`
 
     });
 

@@ -43,7 +43,7 @@ function SearchPortfolio() {
 
       const response =
       await axios.get(
-`http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/search/${username}`
+`https://portfolio-builder-jxjx.onrender.com/api/portfolio/search/${username}`
       );
 
       if (response.data) {

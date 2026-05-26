@@ -39,7 +39,7 @@ savedPortfolio?.username
 
         const response =
         await axios.get(
-`http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/user/${savedPortfolio.username}`
+`https://portfolio-builder-jxjx.onrender.com//api/portfolio/user/${savedPortfolio.username}`
         );
 
         setPortfolio(

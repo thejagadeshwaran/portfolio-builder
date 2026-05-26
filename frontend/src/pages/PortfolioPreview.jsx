@@ -37,7 +37,7 @@ function PortfolioPreview() {
 
       const response =
       await axios.get(
-`https://api.github.com/users/${username}/repos`
+`https:/api.github.com/users/${username}/repos`
       );
 
       setRepos(
@@ -77,7 +77,7 @@ response.data
 
       const response =
       await axios.get(
-`http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/user/${username}`
+`https://portfolio-builder-jxjx.onrender.com/api/portfolio/user/${username}`
       );
 
       setData(
@@ -138,7 +138,7 @@ response.data
     try {
 
       await axios.delete(
-`http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/delete/${data?._id}`
+`https://portfolio-builder-jxjx.onrender.com/api/portfolio/delete/${data?._id}`
       );
 
       localStorage.removeItem(
