@@ -1,235 +1,232 @@
-import axios
-from "axios";
-
-import {
- useState
-}
-from "react";
-
-import {
- useNavigate
-}
-from "react-router-dom";
-
-import Navbar
-from "../components/Navbar";
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 function PortfolioBuilder() {
 
-  const navigate =
-  useNavigate();
+  const navigate = useNavigate();
 
   // Get edit data
   const savedPortfolio =
-  JSON.parse(
-localStorage.getItem(
-"editPortfolio"
-  ));
+    JSON.parse(
+      localStorage.getItem(
+        "editPortfolio"
+      )
+    );
 
   // State
   const [portfolioData,
-  setPortfolioData] =
-  useState(
+    setPortfolioData] =
+    useState(
 
-savedPortfolio || {
+      savedPortfolio || {
 
-    fullName: "",
-    username: "",
-    about: "",
-    skills: "",
-    github: "",
-    githubUsername: "",
-    linkedin: "",
-    phone: "",
-    profileImage: "",
-    resume: "",
-    projects: [""],
-    theme: "modern",
-    views: 0
-  });
+        fullName: "",
+        username: "",
+        about: "",
+        skills: "",
+        github: "",
+        githubUsername: "",
+        linkedin: "",
+        phone: "",
+        profileImage: "",
+        resume: "",
+        projects: [],
+        theme: "modern",
+        views: 0
+      });
 
   // Handle Input Change
   const handleChange =
-  (e) => {
-
-    setPortfolioData({
-
-      ...portfolioData,
-
-      [e.target.name]:
-      e.target.value
-    });
-  };
-
-  // Profile Image Upload
-  const handleImageChange =
-  (e) => {
-
-    const file =
-    e.target.files[0];
-
-    if (!file) return;
-
-    const imageURL =
-    URL.createObjectURL(file);
-
-    setPortfolioData({
-
-      ...portfolioData,
-
-      profileImage:
-      imageURL
-    });
-  };
-
-  // Resume Upload
-  const handleResumeUpload =
-  async (e) => {
-
-    const file =
-    e.target.files[0];
-
-    if (!file) return;
-
-    const formData =
-    new FormData();
-
-    formData.append(
-      "resume",
-      file
-    );
-
-    try {
-
-      const response =
-      await axios.post(
-
-"https://portfolio-builder-jxjx.onrender.com/api/portfolio/upload-resume",
-
-        formData
-      );
+    (e) => {
 
       setPortfolioData({
 
         ...portfolioData,
 
-        resume:
-response.data.resumeUrl
+        [e.target.name]:
+          e.target.value
       });
+    };
 
-      alert(
-"Resume Uploaded!"
+  // Profile Image Upload
+  const handleImageChange =
+    (e) => {
+
+      const file =
+        e.target.files[0];
+
+      if (!file) return;
+
+      const imageURL =
+        URL.createObjectURL(file);
+
+      setPortfolioData({
+
+        ...portfolioData,
+
+        profileImage:
+          imageURL
+      });
+    };
+
+  // Resume Upload
+  const handleResumeUpload =
+    async (e) => {
+
+      const file =
+        e.target.files[0];
+
+      if (!file) return;
+
+      const formData =
+        new FormData();
+
+      formData.append(
+        "resume",
+        file
       );
 
-    } catch (error) {
+      try {
 
-      console.error(error);
+        const response =
+          await axios.post(
 
-      alert(
-"Resume upload failed"
-      );
-    }
-  };
+            "https://portfolio-builder-jxjx.onrender.com/api/portfolio/upload-resume",
+
+            formData
+          );
+
+        setPortfolioData({
+
+          ...portfolioData,
+
+          resume:
+            response.data.resumeUrl
+        });
+
+        alert(
+          "Resume Uploaded!"
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "Resume upload failed"
+        );
+      }
+    };
 
   // Project Change
   const handleProjectChange =
-  (index, value) => {
+    (index, value) => {
 
-    const updatedProjects =
-    [...portfolioData.projects];
+      const updatedProjects =
+        Array.isArray(
+          portfolioData.projects
+        )
+          ? [...portfolioData.projects]
+          : [];
 
-    updatedProjects[index] =
-    value;
+      updatedProjects[index] =
+        value;
 
-    setPortfolioData({
+      setPortfolioData({
 
-      ...portfolioData,
+        ...portfolioData,
 
-      projects:
-updatedProjects
-    });
-  };
+        projects:
+          updatedProjects
+      });
+    };
 
   // Add Project
   const addProjectField =
-  () => {
+    () => {
 
-    setPortfolioData({
+      setPortfolioData({
 
-      ...portfolioData,
+        ...portfolioData,
 
-      projects: [
-...portfolioData.projects,
-""
-      ]
-    });
-  };
+        projects: [
+          ...(Array.isArray(
+            portfolioData.projects
+          )
+            ? portfolioData.projects
+            : []),
+          ""
+        ]
+      });
+    };
 
   // Save / Update Portfolio
   const handleSubmit =
-  async (e) => {
+    async (e) => {
 
-    e.preventDefault();
+      e.preventDefault();
 
-    try {
+      try {
 
-      // Save username locally
-      localStorage.setItem(
-"portfolioUsername",
-portfolioData.username
-.toLowerCase()
-      );
-
-      // UPDATE
-      if (
-savedPortfolio?._id
-      ) {
-
-        await axios.put(
-
-`https://portfolio-builder-jxjx.onrender.com/api/portfolio/update/${savedPortfolio._id}`,
-
-          portfolioData
+        // Save username locally
+        localStorage.setItem(
+          "portfolioUsername",
+          portfolioData.username
+            .toLowerCase()
         );
+
+        // UPDATE
+        if (
+          savedPortfolio?._id
+        ) {
+
+          await axios.put(
+
+            `https://portfolio-builder-jxjx.onrender.com/api/portfolio/update/${savedPortfolio._id}`,
+
+            portfolioData
+          );
+
+          alert(
+            "Portfolio Updated Successfully!"
+          );
+
+        } else {
+
+          // CREATE
+          await axios.post(
+
+            "https://portfolio-builder-jxjx.onrender.com/api/portfolio/save",
+
+            portfolioData
+          );
+
+          alert(
+            "Portfolio Saved Successfully!"
+          );
+        }
+
+        // Remove edit data
+        localStorage.removeItem(
+          "editPortfolio"
+        );
+
+        // Go preview
+        navigate(
+          "/preview"
+        );
+
+      } catch (error) {
+
+        console.error(error);
 
         alert(
-"Portfolio Updated Successfully!"
-        );
-
-      } else {
-
-        // CREATE
-        await axios.post(
-
-"https://portfolio-builder-jxjx.onrender.com/api/portfolio/save",
-
-          portfolioData
-        );
-
-        alert(
-"Portfolio Saved Successfully!"
+          "Error saving portfolio"
         );
       }
-
-      // Remove edit data
-      localStorage.removeItem(
-"editPortfolio"
-      );
-
-      // Go preview
-      navigate(
-"/preview"
-      );
-
-    } catch (error) {
-
-      console.error(error);
-
-      alert(
-"Error saving portfolio"
-      );
-    }
-  };
+    };
 
   return (
     <>
@@ -248,7 +245,7 @@ savedPortfolio?._id
           </h2>
 
           <form
-onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
           >
 
             {/* Profile Image */}
@@ -259,12 +256,12 @@ onSubmit={handleSubmit}
               </label>
 
               <input
-type="file"
-accept="image/*"
-className="form-control"
-onChange={
-handleImageChange
-}
+                type="file"
+                accept="image/*"
+                className="form-control"
+                onChange={
+                  handleImageChange
+                }
               />
             </div>
 
@@ -276,12 +273,12 @@ handleImageChange
               </label>
 
               <input
-type="file"
-accept=".pdf"
-className="form-control"
-onChange={
-handleResumeUpload
-}
+                type="file"
+                accept=".pdf"
+                className="form-control"
+                onChange={
+                  handleResumeUpload
+                }
               />
             </div>
 
@@ -293,26 +290,26 @@ handleResumeUpload
               </label>
 
               <select
-name="theme"
-className="form-control"
-value={
-portfolioData.theme
-}
-onChange={
-handleChange
-}
+                name="theme"
+                className="form-control"
+                value={
+                  portfolioData.theme
+                }
+                onChange={
+                  handleChange
+                }
               >
 
                 <option value="modern">
-Modern
+                  Modern
                 </option>
 
                 <option value="professional">
-Professional
+                  Professional
                 </option>
 
                 <option value="developer">
-Developer
+                  Developer
                 </option>
 
               </select>
@@ -320,83 +317,83 @@ Developer
 
             {/* Full Name */}
             <input
-type="text"
-name="fullName"
-placeholder="Full Name"
-className="form-control mb-3"
-value={
-portfolioData.fullName
-}
-onChange={
-handleChange
-}
-required
+              type="text"
+              name="fullName"
+              placeholder="Full Name"
+              className="form-control mb-3"
+              value={
+                portfolioData.fullName
+              }
+              onChange={
+                handleChange
+              }
+              required
             />
 
             {/* Username */}
             <input
-type="text"
-name="username"
-placeholder="Username"
-className="form-control mb-3"
-value={
-portfolioData.username
-}
-onChange={(e) =>
+              type="text"
+              name="username"
+              placeholder="Username"
+              className="form-control mb-3"
+              value={
+                portfolioData.username
+              }
+              onChange={(e) =>
 
-setPortfolioData({
+                setPortfolioData({
 
-...portfolioData,
+                  ...portfolioData,
 
-username:
-e.target.value
-.toLowerCase()
+                  username:
+                    e.target.value
+                      .toLowerCase()
 
-})
-}
-required
+                })
+              }
+              required
             />
 
             {/* Phone */}
             <input
-type="text"
-name="phone"
-placeholder="Phone Number"
-className="form-control mb-3"
-value={
-portfolioData.phone
-}
-onChange={
-handleChange
-}
+              type="text"
+              name="phone"
+              placeholder="Phone Number"
+              className="form-control mb-3"
+              value={
+                portfolioData.phone
+              }
+              onChange={
+                handleChange
+              }
             />
 
             {/* About */}
             <textarea
-name="about"
-placeholder="About Me"
-className="form-control mb-3"
-rows="4"
-value={
-portfolioData.about
-}
-onChange={
-handleChange
-}
+              name="about"
+              placeholder="About Me"
+              className="form-control mb-3"
+              rows="4"
+              value={
+                portfolioData.about
+              }
+              onChange={
+                handleChange
+              }
             />
 
             {/* Skills */}
             <input
-type="text"
-name="skills"
-placeholder="Skills"
-className="form-control mb-3"
-value={
-portfolioData.skills
-}
-onChange={
-handleChange
-}
+              type="text"
+              name="skills"
+              placeholder="Skills"
+              className="form-control mb-3"
+              value={
+                portfolioData.skills
+              }
+              onChange={
+                handleChange
+              }
             />
 
             {/* Projects */}
@@ -404,76 +401,82 @@ handleChange
               🚀 Projects
             </h5>
 
-            {portfolioData.projects.map(
-(project, index) => (
+            {(Array.isArray(
+              portfolioData.projects
+            )
+              ? portfolioData.projects
+              : []
+            ).map(
+              (project, index) => (
 
-              <input
-key={index}
-type="text"
-placeholder={`Project ${index + 1}`}
-className="form-control mb-2"
-value={project}
-onChange={(e) =>
-handleProjectChange(
-index,
-e.target.value
-)}
-              />
-            ))}
+                <input
+                  key={index}
+                  type="text"
+                  placeholder={`Project ${index + 1}`}
+                  className="form-control mb-2"
+                  value={project}
+                  onChange={(e) =>
+                    handleProjectChange(
+                      index,
+                      e.target.value
+                    )
+                  }
+                />
+              ))}
 
             <button
-type="button"
-className="btn btn-secondary mb-3"
-onClick={
-addProjectField
-}
+              type="button"
+              className="btn btn-secondary mb-3"
+              onClick={
+                addProjectField
+              }
             >
               + Add Project
             </button>
 
             {/* GitHub */}
             <input
-type="text"
-name="github"
-placeholder="GitHub URL"
-className="form-control mb-3"
-value={
-portfolioData.github
-}
-onChange={
-handleChange
-}
+              type="text"
+              name="github"
+              placeholder="GitHub URL"
+              className="form-control mb-3"
+              value={
+                portfolioData.github
+              }
+              onChange={
+                handleChange
+              }
             />
 
             <input
-type="text"
-name="githubUsername"
-placeholder="GitHub Username"
-className="form-control mb-3"
-value={
-portfolioData.githubUsername
-}
-onChange={
-handleChange
-}
+              type="text"
+              name="githubUsername"
+              placeholder="GitHub Username"
+              className="form-control mb-3"
+              value={
+                portfolioData.githubUsername
+              }
+              onChange={
+                handleChange
+              }
             />
 
             {/* LinkedIn */}
             <input
-type="text"
-name="linkedin"
-placeholder="LinkedIn URL"
-className="form-control mb-4"
-value={
-portfolioData.linkedin
-}
-onChange={
-handleChange
-}
+              type="text"
+              name="linkedin"
+              placeholder="LinkedIn URL"
+              className="form-control mb-4"
+              value={
+                portfolioData.linkedin
+              }
+              onChange={
+                handleChange
+              }
             />
 
             <button
-className="btn btn-primary btn-lg w-100 rounded-pill shadow"
+              className="btn btn-primary btn-lg w-100 rounded-pill shadow"
             >
 
               {savedPortfolio
