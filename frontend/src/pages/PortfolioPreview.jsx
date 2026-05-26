@@ -1,111 +1,124 @@
 import {
- useEffect,
- useState,
- useCallback
-}
-from "react";
+  useEffect,
+  useState,
+  useCallback
+} from "react";
 
-import axios
-from "axios";
+import axios from "axios";
 
 import {
- useNavigate
-}
-from "react-router-dom";
+  useNavigate
+} from "react-router-dom";
 
-import Navbar
-from "../components/Navbar";
+import Navbar from "../components/Navbar";
 
 function PortfolioPreview() {
 
   const [data,
-  setData] =
-  useState(null);
+    setData] =
+    useState(null);
 
   const [repos,
-  setRepos] =
-  useState([]);
+    setRepos] =
+    useState([]);
 
   const navigate =
-  useNavigate();
+    useNavigate();
 
   // Fetch GitHub Repositories
   const fetchGitHubRepos =
-  async (username) => {
+    async (username) => {
 
-    try {
+      try {
 
-      const response =
-      await axios.get(
-`https:/api.github.com/users/${username}/repos`
-      );
+        const response =
+          await axios.get(
+            `https://api.github.com/users/${username}/repos`
+          );
 
-      setRepos(
-response.data
-      );
+        setRepos(
+          Array.isArray(
+            response.data
+          )
+            ? response.data
+            : []
+        );
 
-    } catch (error) {
+      } catch (error) {
 
-      console.error(error);
-    }
-  };
+        console.error(error);
+      }
+    };
 
   // Fetch Portfolio
   const fetchPortfolio =
-  useCallback(
-  async () => {
+    useCallback(
+      async () => {
 
-    try {
+        try {
 
-      const username =
-      localStorage.getItem(
-"portfolioUsername"
-      );
+          const username =
+            localStorage.getItem(
+              "portfolioUsername"
+            );
 
-      if (!username) {
+          if (!username) {
 
-        alert(
-"No portfolio found"
-        );
+            alert(
+              "No portfolio found"
+            );
 
-        navigate(
-"/builder"
-        );
+            navigate(
+              "/builder"
+            );
 
-        return;
-      }
+            return;
+          }
 
-      const response =
-      await axios.get(
-`https://portfolio-builder-jxjx.onrender.com/api/portfolio/user/${username}`
-      );
+          const response =
+            await axios.get(
+              `https://portfolio-builder-jxjx.onrender.com/api/portfolio/user/${username}`
+            );
 
-      setData(
-response.data
-      );
+          const portfolio =
+            response.data;
 
-      // Fetch GitHub Repositories
-      if (
-response.data
-?.githubUsername
-      ) {
+          // Safe projects fix
+          if (
+            !Array.isArray(
+              portfolio.projects
+            )
+          ) {
+            portfolio.projects =
+              [];
+          }
 
-        fetchGitHubRepos(
-response.data
-.githubUsername
-        );
-      }
+          setData(
+            portfolio
+          );
 
-    } catch (error) {
+          // Fetch GitHub repos
+          if (
+            portfolio
+              ?.githubUsername
+          ) {
 
-      console.error(error);
+            fetchGitHubRepos(
+              portfolio
+                .githubUsername
+            );
+          }
 
-      alert(
-"Portfolio not found"
-      );
-    }
+        } catch (error) {
 
-  }, [navigate]);
+          console.error(error);
+
+          alert(
+            "Portfolio not found"
+          );
+        }
+
+      }, [navigate]);
 
   // Load Portfolio
   useEffect(() => {
@@ -116,66 +129,70 @@ response.data
 
   // Theme
   const getThemeClass =
-  () => {
+    () => {
 
-    switch (data?.theme) {
+      switch (
+      data?.theme
+      ) {
 
-      case "professional":
-        return "bg-light border";
+        case "professional":
+          return "bg-light border";
 
-      case "developer":
-        return "bg-dark text-white";
+        case "developer":
+          return "bg-dark text-white";
 
-      default:
-        return "bg-white";
-    }
-  };
+        default:
+          return "bg-white";
+      }
+    };
 
   // Delete Portfolio
   const handleDelete =
-  async () => {
+    async () => {
 
-    try {
+      try {
 
-      await axios.delete(
-`https://portfolio-builder-jxjx.onrender.com/api/portfolio/delete/${data?._id}`
-      );
+        await axios.delete(
+          `https://portfolio-builder-jxjx.onrender.com/api/portfolio/delete/${data?._id}`
+        );
 
-      localStorage.removeItem(
-"portfolioUsername"
-      );
+        localStorage.removeItem(
+          "portfolioUsername"
+        );
 
-      alert(
-"Portfolio Deleted Successfully!"
-      );
+        alert(
+          "Portfolio Deleted Successfully!"
+        );
 
-      navigate(
-"/builder"
-      );
+        navigate(
+          "/builder"
+        );
 
-    } catch (error) {
+      } catch (error) {
 
-      console.error(error);
+        console.error(error);
 
-      alert(
-"Error deleting portfolio"
-      );
-    }
-  };
+        alert(
+          "Error deleting portfolio"
+        );
+      }
+    };
 
   // Edit Portfolio
   const handleEdit =
-  () => {
+    () => {
 
-    localStorage.setItem(
-      "editPortfolio",
-      JSON.stringify(data)
-    );
+      localStorage.setItem(
+        "editPortfolio",
+        JSON.stringify(
+          data
+        )
+      );
 
-    navigate(
-"/builder"
-    );
-  };
+      navigate(
+        "/builder"
+      );
+    };
 
   // Loading
   if (!data) {
@@ -185,7 +202,7 @@ response.data
       <div className="text-center mt-5">
 
         <h2>
-Loading...
+          Loading...
         </h2>
 
       </div>
@@ -199,7 +216,7 @@ Loading...
       <div className="container mt-5 mb-5">
 
         <div
-className={`card shadow-lg p-4 rounded-4 text-center ${getThemeClass()}`}
+          className={`card shadow-lg p-4 rounded-4 text-center ${getThemeClass()}`}
         >
 
           <h2 className="mb-4 fw-bold">
@@ -210,15 +227,19 @@ className={`card shadow-lg p-4 rounded-4 text-center ${getThemeClass()}`}
           <div className="mb-4">
 
             <button
-className="btn btn-warning me-3 px-4"
-onClick={handleEdit}
+              className="btn btn-warning me-3 px-4"
+              onClick={
+                handleEdit
+              }
             >
               ✏️ Edit Portfolio
             </button>
 
             <button
-className="btn btn-danger px-4"
-onClick={handleDelete}
+              className="btn btn-danger px-4"
+              onClick={
+                handleDelete
+              }
             >
               🗑 Delete Portfolio
             </button>
@@ -227,14 +248,17 @@ onClick={handleDelete}
 
           {/* Profile Image */}
           <img
-src={data?.profileImage}
-alt="Profile"
-width="180"
-height="180"
-className="rounded-circle border shadow mb-3"
-style={{
-objectFit: "cover"
-}}
+            src={
+              data?.profileImage
+            }
+            alt="Profile"
+            width="180"
+            height="180"
+            className="rounded-circle border shadow mb-3"
+            style={{
+              objectFit:
+                "cover"
+            }}
           />
 
           <h2 className="fw-bold">
@@ -250,59 +274,79 @@ objectFit: "cover"
           <div className="text-start">
 
             <p>
-<strong>📞 Phone:</strong>{" "}
-{data?.phone}
+              <strong>
+                📞 Phone:
+              </strong>{" "}
+              {data?.phone}
             </p>
 
             <p>
-<strong>📝 About:</strong>{" "}
-{data?.about}
+              <strong>
+                📝 About:
+              </strong>{" "}
+              {data?.about}
             </p>
 
             <p>
-<strong>🛠 Skills:</strong>{" "}
-{data?.skills}
+              <strong>
+                🛠 Skills:
+              </strong>{" "}
+              {data?.skills}
             </p>
 
             <p>
-<strong>👀 Views:</strong>{" "}
-{data?.views || 0}
+              <strong>
+                👀 Views:
+              </strong>{" "}
+              {data?.views || 0}
             </p>
 
             <p>
-<strong>💻 GitHub:</strong>{" "}
+              <strong>
+                💻 GitHub:
+              </strong>{" "}
 
-<a
-href={data?.github}
-target="_blank"
-rel="noreferrer"
->
-GitHub Profile
-</a>
+              <a
+                href={
+                  data?.github
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub Profile
+              </a>
             </p>
 
             <p>
-<strong>💼 LinkedIn:</strong>{" "}
+              <strong>
+                💼 LinkedIn:
+              </strong>{" "}
 
-<a
-href={data?.linkedin}
-target="_blank"
-rel="noreferrer"
->
-LinkedIn Profile
-</a>
+              <a
+                href={
+                  data?.linkedin
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                LinkedIn Profile
+              </a>
             </p>
 
             <p>
-<strong>📄 Resume:</strong>{" "}
+              <strong>
+                📄 Resume:
+              </strong>{" "}
 
-<a
-href={data?.resume}
-target="_blank"
-rel="noreferrer"
->
-View Resume
-</a>
+              <a
+                href={
+                  data?.resume
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                View Resume
+              </a>
             </p>
 
           </div>
@@ -314,16 +358,25 @@ View Resume
 
           <ul className="list-group mb-4">
 
-            {data?.projects?.map(
-(project, index) => (
+            {(
+              Array.isArray(
+                data?.projects
+              )
+                ? data.projects
+                : []
+            ).map(
+              (
+                project,
+                index
+              ) => (
 
-              <li
-key={index}
-className="list-group-item"
-              >
-                {project}
-              </li>
-            ))}
+                <li
+                  key={index}
+                  className="list-group-item"
+                >
+                  {project}
+                </li>
+              ))}
 
           </ul>
 
@@ -335,23 +388,25 @@ className="list-group-item"
           <ul className="list-group">
 
             {repos.map(
-(repo) => (
+              (repo) => (
 
-              <li
-key={repo.id}
-className="list-group-item"
-              >
-
-                <a
-href={repo.html_url}
-target="_blank"
-rel="noreferrer"
+                <li
+                  key={repo.id}
+                  className="list-group-item"
                 >
-                  {repo.name}
-                </a>
 
-              </li>
-            ))}
+                  <a
+                    href={
+                      repo.html_url
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {repo.name}
+                  </a>
+
+                </li>
+              ))}
 
           </ul>
 
