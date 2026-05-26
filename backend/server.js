@@ -2,8 +2,21 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 
 require("dotenv").config();
+
+// Create uploads folder automatically
+const uploadDir = path.join(
+  __dirname,
+  "uploads"
+);
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, {
+    recursive: true
+  });
+}
 
 // Import Routes
 const portfolioRoutes =
@@ -19,6 +32,7 @@ app.use(cors({
   origin: "*",
   credentials: true
 }));
+
 app.use(express.json());
 
 // Uploads Folder Access
@@ -60,7 +74,8 @@ app.get("/", (req, res) => {
 });
 
 // Port
-const PORT = 5000;
+const PORT =
+  process.env.PORT || 5000;
 
 // Server Start
 app.listen(PORT, () => {
