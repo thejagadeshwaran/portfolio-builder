@@ -81,7 +81,6 @@ function PortfolioPreview() {
         const portfolio =
           response.data || {};
 
-        // Safe projects fix
         portfolio.projects =
           Array.isArray(
             portfolio.projects
@@ -93,7 +92,6 @@ function PortfolioPreview() {
           portfolio
         );
 
-        // Fetch GitHub repos
         if (
           portfolio.githubUsername
         ) {
@@ -120,72 +118,16 @@ function PortfolioPreview() {
 
   }, [fetchPortfolio]);
 
-  // Theme
-  const getThemeClass =
+  // Open Public Portfolio
+  const openPublicPortfolio =
     () => {
 
-      switch (
-      data?.theme
-      ) {
-
-        case "professional":
-          return "bg-light border";
-
-        case "developer":
-          return "bg-dark text-white";
-
-        default:
-          return "bg-white";
-      }
-    };
-
-  // Delete Portfolio
-  const handleDelete =
-    async () => {
-
-      try {
-
-        await axios.delete(
-          `https://portfolio-builder-jxjx.onrender.com/api/portfolio/delete/${data?._id}`
-        );
-
-        localStorage.removeItem(
-          "portfolioUsername"
-        );
-
-        alert(
-          "Portfolio Deleted Successfully!"
-        );
-
-        navigate(
-          "/builder"
-        );
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          "Error deleting portfolio"
-        );
-      }
-    };
-
-  // Edit Portfolio
-  const handleEdit =
-    () => {
-
-      localStorage.setItem(
-        "editPortfolio",
-        JSON.stringify(data)
-      );
-
-      navigate(
-        "/builder"
+      window.open(
+        `/portfolio/${data.username}`,
+        "_blank"
       );
     };
 
-  // Loading
   if (!data) {
 
     return (
@@ -201,9 +143,7 @@ function PortfolioPreview() {
 
       <div className="container mt-5 mb-5">
 
-        <div
-          className={`card shadow-lg p-4 rounded-4 text-center ${getThemeClass()}`}
-        >
+        <div className="card shadow-lg p-4 rounded-4 text-center">
 
           <h2 className="mb-4 fw-bold">
             Portfolio Preview
@@ -213,22 +153,26 @@ function PortfolioPreview() {
           <div className="mb-4">
 
             <button
-              className="btn btn-warning me-3 px-4"
-              onClick={handleEdit}
+              className="btn btn-success me-3"
+              onClick={
+                openPublicPortfolio
+              }
+            >
+              🌍 Public Portfolio
+            </button>
+
+            <button
+              className="btn btn-warning"
+              onClick={() =>
+                navigate("/builder")
+              }
             >
               ✏️ Edit Portfolio
             </button>
 
-            <button
-              className="btn btn-danger px-4"
-              onClick={handleDelete}
-            >
-              🗑 Delete Portfolio
-            </button>
-
           </div>
 
-          {/* Profile Image */}
+          {/* Profile */}
           {data?.profileImage &&
           !data.profileImage.startsWith("blob:") && (
 
@@ -245,90 +189,35 @@ function PortfolioPreview() {
 
           )}
 
-          <h2 className="fw-bold">
-            {data?.fullName}
+          <h2>
+            {data.fullName}
           </h2>
 
-          <p className="text-muted">
-            @{data?.username}
+          <p>
+            @{data.username}
           </p>
 
-          <hr />
-
-          <div className="text-start">
-
-            <p>
-              <strong>📞 Phone:</strong>{" "}
-              {data?.phone || "N/A"}
-            </p>
-
-            <p>
-              <strong>📝 About:</strong>{" "}
-              {data?.about || "N/A"}
-            </p>
-
-            <p>
-              <strong>🛠 Skills:</strong>{" "}
-              {data?.skills || "N/A"}
-            </p>
-
-            <p>
-              <strong>👀 Views:</strong>{" "}
-              {data?.views || 0}
-            </p>
-
-            <p>
-              <strong>💻 GitHub:</strong>{" "}
-
-              <a
-                href={data?.github}
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub Profile
-              </a>
-            </p>
-
-            <p>
-              <strong>💼 LinkedIn:</strong>{" "}
-
-              <a
-                href={data?.linkedin}
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn Profile
-              </a>
-            </p>
-
-            <p>
-              <strong>📄 Resume:</strong>{" "}
-
-              <a
-                href={data?.resume}
-                target="_blank"
-                rel="noreferrer"
-              >
-                View Resume
-              </a>
-            </p>
-
-          </div>
+          <p>
+            {data.about}
+          </p>
 
           {/* Projects */}
-          <h4 className="mt-4">
+          <h4>
             🚀 Projects
           </h4>
 
           <ul className="list-group mb-4">
 
             {(Array.isArray(
-              data?.projects
+              data.projects
             )
               ? data.projects
               : []
             ).map(
-              (project, index) => (
+              (
+                project,
+                index
+              ) => (
 
                 <li
                   key={index}
@@ -340,7 +229,7 @@ function PortfolioPreview() {
 
           </ul>
 
-          {/* GitHub Repositories */}
+          {/* GitHub Repos */}
           <h4>
             💻 GitHub Repositories
           </h4>
