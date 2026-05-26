@@ -104,7 +104,7 @@ savedPortfolio || {
       const response =
       await axios.post(
 
-"http://https://portfolio-builder-navy-eight.vercel.app//api/portfolio/upload-resume",
+"http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/upload-resume",
 
         formData
       );
@@ -187,7 +187,7 @@ savedPortfolio?._id
 
         await axios.put(
 
-`http://https://portfolio-builder-navy-eight.vercel.app//api/portfolio/update/${savedPortfolio._id}`,
+`http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/update/${savedPortfolio._id}`,
 
           portfolioData
         );
@@ -201,7 +201,7 @@ savedPortfolio?._id
         // CREATE
         await axios.post(
 
-"http://https://portfolio-builder-navy-eight.vercel.app//api/portfolio/save",
+"http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/save",
 
           portfolioData
         );

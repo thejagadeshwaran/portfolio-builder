@@ -77,7 +77,7 @@ response.data
 
       const response =
       await axios.get(
-`http://https://portfolio-builder-navy-eight.vercel.app//api/portfolio/user/${username}`
+`http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/user/${username}`
       );
 
       setData(
@@ -138,7 +138,7 @@ response.data
     try {
 
       await axios.delete(
-`http://https://portfolio-builder-navy-eight.vercel.app//api/portfolio/delete/${data?._id}`
+`http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/delete/${data?._id}`
       );
 
       localStorage.removeItem(

@@ -356,7 +356,7 @@ upload.single(
     .json({
 
 resumeUrl:
-`http://https://portfolio-builder-navy-eight.vercel.app//uploads/${req.file.filename}`
+`http://https://portfolio-builder-jxjx.onrender.com//uploads/${req.file.filename}`
 
     });
 

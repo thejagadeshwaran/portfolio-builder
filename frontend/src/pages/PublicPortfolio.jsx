@@ -69,7 +69,7 @@ response.data
         if (!viewed) {
 
           await axios.put(
-`http://https://portfolio-builder-navy-eight.vercel.app//api/portfolio/view/${username}`
+`http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/view/${username}`
           );
 
           sessionStorage.setItem(
@@ -81,7 +81,7 @@ response.data
         // Fetch updated profile
         const response =
         await axios.get(
-`http://https://portfolio-builder-navy-eight.vercel.app//api/portfolio/user/${username}`
+`http://https://portfolio-builder-jxjx.onrender.com//api/portfolio/user/${username}`
         );
 
         setData(
