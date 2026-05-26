@@ -7,13 +7,23 @@ function PortfolioBuilder() {
 
   const navigate = useNavigate();
 
-  // Get edit data
+  // Get edit data safely
   const savedPortfolio =
     JSON.parse(
       localStorage.getItem(
         "editPortfolio"
       )
     );
+
+  // Fix old bad data
+  if (
+    savedPortfolio &&
+    !Array.isArray(
+      savedPortfolio.projects
+    )
+  ) {
+    savedPortfolio.projects = [""];
+  }
 
   // State
   const [portfolioData,
@@ -32,7 +42,7 @@ function PortfolioBuilder() {
         phone: "",
         profileImage: "",
         resume: "",
-        projects: [],
+        projects: [""],
         theme: "modern",
         views: 0
       });
@@ -107,7 +117,7 @@ function PortfolioBuilder() {
         });
 
         alert(
-          "Resume Uploaded!"
+          "Resume Uploaded Successfully!"
         );
 
       } catch (error) {
@@ -170,14 +180,13 @@ function PortfolioBuilder() {
 
       try {
 
-        // Save username locally
         localStorage.setItem(
           "portfolioUsername",
           portfolioData.username
             .toLowerCase()
         );
 
-        // UPDATE
+        // Update Portfolio
         if (
           savedPortfolio?._id
         ) {
@@ -195,7 +204,7 @@ function PortfolioBuilder() {
 
         } else {
 
-          // CREATE
+          // Create Portfolio
           await axios.post(
 
             "https://portfolio-builder-jxjx.onrender.com/api/portfolio/save",
@@ -208,12 +217,10 @@ function PortfolioBuilder() {
           );
         }
 
-        // Remove edit data
         localStorage.removeItem(
           "editPortfolio"
         );
 
-        // Go preview
         navigate(
           "/preview"
         );
@@ -478,11 +485,9 @@ function PortfolioBuilder() {
             <button
               className="btn btn-primary btn-lg w-100 rounded-pill shadow"
             >
-
               {savedPortfolio
                 ? "Update Portfolio"
                 : "Save Portfolio"}
-
             </button>
 
           </form>
