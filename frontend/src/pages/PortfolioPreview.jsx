@@ -5,7 +5,6 @@ import {
 } from "react";
 
 import axios from "axios";
-
 import {
   useNavigate
 } from "react-router-dom";
@@ -14,12 +13,10 @@ import Navbar from "../components/Navbar";
 
 function PortfolioPreview() {
 
-  const [data,
-    setData] =
+  const [data, setData] =
     useState(null);
 
-  const [repos,
-    setRepos] =
+  const [repos, setRepos] =
     useState([]);
 
   const navigate =
@@ -47,80 +44,76 @@ function PortfolioPreview() {
       } catch (error) {
 
         console.error(error);
+
+        setRepos([]);
       }
     };
 
   // Fetch Portfolio
   const fetchPortfolio =
-    useCallback(
-      async () => {
+    useCallback(async () => {
 
-        try {
+      try {
 
-          const username =
-            localStorage.getItem(
-              "portfolioUsername"
-            );
-
-          if (!username) {
-
-            alert(
-              "No portfolio found"
-            );
-
-            navigate(
-              "/builder"
-            );
-
-            return;
-          }
-
-          const response =
-            await axios.get(
-              `https://portfolio-builder-jxjx.onrender.com/api/portfolio/user/${username}`
-            );
-
-          const portfolio =
-            response.data;
-
-          // Safe projects fix
-          if (
-            !Array.isArray(
-              portfolio.projects
-            )
-          ) {
-            portfolio.projects =
-              [];
-          }
-
-          setData(
-            portfolio
+        const username =
+          localStorage.getItem(
+            "portfolioUsername"
           );
 
-          // Fetch GitHub repos
-          if (
-            portfolio
-              ?.githubUsername
-          ) {
-
-            fetchGitHubRepos(
-              portfolio
-                .githubUsername
-            );
-          }
-
-        } catch (error) {
-
-          console.error(error);
+        if (!username) {
 
           alert(
-            "Portfolio not found"
+            "No portfolio found"
+          );
+
+          navigate(
+            "/builder"
+          );
+
+          return;
+        }
+
+        const response =
+          await axios.get(
+            `https://portfolio-builder-jxjx.onrender.com/api/portfolio/user/${username}`
+          );
+
+        const portfolio =
+          response.data || {};
+
+        // Fix projects safely
+        portfolio.projects =
+          Array.isArray(
+            portfolio.projects
+          )
+            ? portfolio.projects
+            : [];
+
+        setData(
+          portfolio
+        );
+
+        // Fetch GitHub repos
+        if (
+          portfolio.githubUsername
+        ) {
+
+          fetchGitHubRepos(
+            portfolio.githubUsername
           );
         }
 
-      }, [navigate]);
+      } catch (error) {
 
-  // Load Portfolio
+        console.error(error);
+
+        alert(
+          "Portfolio not found"
+        );
+      }
+
+    }, [navigate]);
+
   useEffect(() => {
 
     fetchPortfolio();
@@ -184,9 +177,7 @@ function PortfolioPreview() {
 
       localStorage.setItem(
         "editPortfolio",
-        JSON.stringify(
-          data
-        )
+        JSON.stringify(data)
       );
 
       navigate(
@@ -198,13 +189,8 @@ function PortfolioPreview() {
   if (!data) {
 
     return (
-
       <div className="text-center mt-5">
-
-        <h2>
-          Loading...
-        </h2>
-
+        <h2>Loading...</h2>
       </div>
     );
   }
@@ -228,18 +214,14 @@ function PortfolioPreview() {
 
             <button
               className="btn btn-warning me-3 px-4"
-              onClick={
-                handleEdit
-              }
+              onClick={handleEdit}
             >
               ✏️ Edit Portfolio
             </button>
 
             <button
               className="btn btn-danger px-4"
-              onClick={
-                handleDelete
-              }
+              onClick={handleDelete}
             >
               🗑 Delete Portfolio
             </button>
@@ -247,19 +229,18 @@ function PortfolioPreview() {
           </div>
 
           {/* Profile Image */}
-          <img
-            src={
-              data?.profileImage
-            }
-            alt="Profile"
-            width="180"
-            height="180"
-            className="rounded-circle border shadow mb-3"
-            style={{
-              objectFit:
-                "cover"
-            }}
-          />
+          {data?.profileImage && (
+            <img
+              src={data.profileImage}
+              alt="Profile"
+              width="180"
+              height="180"
+              className="rounded-circle border shadow mb-3"
+              style={{
+                objectFit: "cover"
+              }}
+            />
+          )}
 
           <h2 className="fw-bold">
             {data?.fullName}
@@ -274,79 +255,23 @@ function PortfolioPreview() {
           <div className="text-start">
 
             <p>
-              <strong>
-                📞 Phone:
-              </strong>{" "}
-              {data?.phone}
+              <strong>📞 Phone:</strong>{" "}
+              {data?.phone || "N/A"}
             </p>
 
             <p>
-              <strong>
-                📝 About:
-              </strong>{" "}
-              {data?.about}
+              <strong>📝 About:</strong>{" "}
+              {data?.about || "N/A"}
             </p>
 
             <p>
-              <strong>
-                🛠 Skills:
-              </strong>{" "}
-              {data?.skills}
+              <strong>🛠 Skills:</strong>{" "}
+              {data?.skills || "N/A"}
             </p>
 
             <p>
-              <strong>
-                👀 Views:
-              </strong>{" "}
+              <strong>👀 Views:</strong>{" "}
               {data?.views || 0}
-            </p>
-
-            <p>
-              <strong>
-                💻 GitHub:
-              </strong>{" "}
-
-              <a
-                href={
-                  data?.github
-                }
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub Profile
-              </a>
-            </p>
-
-            <p>
-              <strong>
-                💼 LinkedIn:
-              </strong>{" "}
-
-              <a
-                href={
-                  data?.linkedin
-                }
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn Profile
-              </a>
-            </p>
-
-            <p>
-              <strong>
-                📄 Resume:
-              </strong>{" "}
-
-              <a
-                href={
-                  data?.resume
-                }
-                target="_blank"
-                rel="noreferrer"
-              >
-                View Resume
-              </a>
             </p>
 
           </div>
@@ -358,12 +283,11 @@ function PortfolioPreview() {
 
           <ul className="list-group mb-4">
 
-            {(
-              Array.isArray(
-                data?.projects
-              )
-                ? data.projects
-                : []
+            {(Array.isArray(
+              data?.projects
+            )
+              ? data.projects
+              : []
             ).map(
               (
                 project,
@@ -387,7 +311,12 @@ function PortfolioPreview() {
 
           <ul className="list-group">
 
-            {repos.map(
+            {(Array.isArray(
+              repos
+            )
+              ? repos
+              : []
+            ).map(
               (repo) => (
 
                 <li
@@ -396,9 +325,7 @@ function PortfolioPreview() {
                 >
 
                   <a
-                    href={
-                      repo.html_url
-                    }
+                    href={repo.html_url}
                     target="_blank"
                     rel="noreferrer"
                   >
