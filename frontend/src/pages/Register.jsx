@@ -42,7 +42,7 @@ function Register() {
 
       const response =
       await axios.post(
-"http://https://portfolio-builder-jxjx.onrender.com//api/auth/register",
+"https://portfolio-builder-jxjx.onrender.com/api/auth/register",
         formData
       );
 
