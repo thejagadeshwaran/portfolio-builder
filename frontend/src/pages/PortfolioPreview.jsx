@@ -81,6 +81,7 @@ function PortfolioPreview() {
         const portfolio =
           response.data || {};
 
+        // Safe projects fix
         portfolio.projects =
           Array.isArray(
             portfolio.projects
@@ -92,6 +93,7 @@ function PortfolioPreview() {
           portfolio
         );
 
+        // Fetch GitHub repos
         if (
           portfolio.githubUsername
         ) {
@@ -123,11 +125,12 @@ function PortfolioPreview() {
     () => {
 
       window.open(
-        `/portfolio/${data.username}`,
+        `/portfolio/${data?.username}`,
         "_blank"
       );
     };
 
+  // Loading
   if (!data) {
 
     return (
@@ -172,7 +175,7 @@ function PortfolioPreview() {
 
           </div>
 
-          {/* Profile */}
+          {/* Profile Image */}
           {data?.profileImage &&
           !data.profileImage.startsWith("blob:") && (
 
@@ -190,15 +193,87 @@ function PortfolioPreview() {
           )}
 
           <h2>
-            {data.fullName}
+            {data?.fullName}
           </h2>
 
           <p>
-            @{data.username}
+            @{data?.username}
           </p>
 
           <p>
-            {data.about}
+            {data?.about}
+          </p>
+
+          <p>
+            <strong>
+              🛠 Skills:
+            </strong>{" "}
+            {data?.skills}
+          </p>
+
+          {/* Links */}
+          <p>
+            <strong>
+              💻 GitHub:
+            </strong>{" "}
+
+            {data?.github && (
+              <a
+                href={
+                  data.github.startsWith("http")
+                    ? data.github
+                    : `https://${data.github}`
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub Profile
+              </a>
+            )}
+
+          </p>
+
+          <p>
+            <strong>
+              💼 LinkedIn:
+            </strong>{" "}
+
+            {data?.linkedin && (
+              <a
+                href={
+                  data.linkedin.startsWith("http")
+                    ? data.linkedin
+                    : `https://${data.linkedin}`
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                LinkedIn Profile
+              </a>
+            )}
+
+          </p>
+
+          {/* Resume */}
+          <p>
+            <strong>
+              📄 Resume:
+            </strong>{" "}
+
+            {data?.resume && (
+              <a
+                href={
+                  data.resume.startsWith("http")
+                    ? data.resume
+                    : `https://portfolio-builder-jxjx.onrender.com${data.resume}`
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                View Resume
+              </a>
+            )}
+
           </p>
 
           {/* Projects */}
@@ -209,7 +284,7 @@ function PortfolioPreview() {
           <ul className="list-group mb-4">
 
             {(Array.isArray(
-              data.projects
+              data?.projects
             )
               ? data.projects
               : []
@@ -229,7 +304,7 @@ function PortfolioPreview() {
 
           </ul>
 
-          {/* GitHub Repos */}
+          {/* GitHub Repositories */}
           <h4>
             💻 GitHub Repositories
           </h4>
