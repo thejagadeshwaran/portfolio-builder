@@ -39,7 +39,7 @@ savedPortfolio?.username
 
         const response =
         await axios.get(
-`http://localhost:5000/api/portfolio/user/${savedPortfolio.username}`
+`http://https://portfolio-builder-navy-eight.vercel.app//api/portfolio/user/${savedPortfolio.username}`
         );
 
         setPortfolio(

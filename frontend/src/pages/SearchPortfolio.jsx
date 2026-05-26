@@ -43,7 +43,7 @@ function SearchPortfolio() {
 
       const response =
       await axios.get(
-`http://localhost:5000/api/portfolio/search/${username}`
+`http://https://portfolio-builder-navy-eight.vercel.app//api/portfolio/search/${username}`
       );
 
       if (response.data) {

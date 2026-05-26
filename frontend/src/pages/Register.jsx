@@ -42,7 +42,7 @@ function Register() {
 
       const response =
       await axios.post(
-"http://localhost:5000/api/auth/register",
+"http://https://portfolio-builder-navy-eight.vercel.app//api/auth/register",
         formData
       );
 
