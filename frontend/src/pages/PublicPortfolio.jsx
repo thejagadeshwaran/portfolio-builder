@@ -198,46 +198,70 @@ function PublicPortfolio() {
               {data?.views || 0}
             </p>
 
+            {/* GitHub */}
             <p>
               <strong>
                 💻 GitHub:
               </strong>{" "}
 
-              <a
-                href={data?.github}
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub Profile
-              </a>
+              {data?.github && (
+                <a
+                  href={
+                    data.github.startsWith("http")
+                      ? data.github
+                      : `https://${data.github}`
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  GitHub Profile
+                </a>
+              )}
+
             </p>
 
+            {/* LinkedIn */}
             <p>
               <strong>
                 💼 LinkedIn:
               </strong>{" "}
 
-              <a
-                href={data?.linkedin}
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn Profile
-              </a>
+              {data?.linkedin && (
+                <a
+                  href={
+                    data.linkedin.startsWith("http")
+                      ? data.linkedin
+                      : `https://${data.linkedin}`
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LinkedIn Profile
+                </a>
+              )}
+
             </p>
 
+            {/* Resume */}
             <p>
               <strong>
                 📄 Resume:
               </strong>{" "}
 
-              <a
-                href={data?.resume}
-                target="_blank"
-                rel="noreferrer"
-              >
-                View Resume
-              </a>
+              {data?.resume && (
+                <a
+                  href={
+                    data.resume.startsWith("http")
+                      ? data.resume
+                      : `https://portfolio-builder-jxjx.onrender.com${data.resume}`
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  View Resume
+                </a>
+              )}
+
             </p>
 
           </div>
