@@ -9,8 +9,7 @@ import {
   useParams
 } from "react-router-dom";
 
-import Navbar
-from "../components/Navbar";
+import Navbar from "../components/Navbar";
 
 function PublicPortfolio() {
 
@@ -27,9 +26,7 @@ function PublicPortfolio() {
 
   // Fetch GitHub Repositories
   const fetchGitHubRepos =
-    async (
-      githubUsername
-    ) => {
+    async (githubUsername) => {
 
       try {
 
@@ -62,13 +59,12 @@ function PublicPortfolio() {
 
         try {
 
-          // Check already viewed
           const viewed =
             sessionStorage.getItem(
               `viewed-${username}`
             );
 
-          // Increase view only once
+          // Increase views only once
           if (!viewed) {
 
             await axios.put(
@@ -90,7 +86,7 @@ function PublicPortfolio() {
           const portfolio =
             response.data || {};
 
-          // Safe projects fix
+          // Fix projects safely
           portfolio.projects =
             Array.isArray(
               portfolio.projects
@@ -102,15 +98,13 @@ function PublicPortfolio() {
             portfolio
           );
 
-          // GitHub repos
+          // Load GitHub repos
           if (
-            portfolio
-              ?.githubUsername
+            portfolio?.githubUsername
           ) {
 
             fetchGitHubRepos(
-              portfolio
-                .githubUsername
+              portfolio.githubUsername
             );
           }
 
@@ -132,13 +126,10 @@ function PublicPortfolio() {
   if (!data) {
 
     return (
-
       <div className="text-center mt-5">
-
         <h2>
           Loading...
         </h2>
-
       </div>
     );
   }
@@ -152,7 +143,8 @@ function PublicPortfolio() {
         <div className="card shadow-lg border-0 rounded-4 p-4 text-center">
 
           {/* Profile Image */}
-          {data?.profileImage && (
+          {data?.profileImage &&
+          !data.profileImage.startsWith("blob:") && (
 
             <img
               src={data.profileImage}
@@ -291,9 +283,7 @@ function PublicPortfolio() {
               ? repos
               : []
             ).map(
-              (
-                repo
-              ) => (
+              (repo) => (
 
                 <li
                   key={repo.id}
