@@ -81,7 +81,7 @@ function PortfolioPreview() {
         const portfolio =
           response.data || {};
 
-        // Fix projects safely
+        // Safe projects fix
         portfolio.projects =
           Array.isArray(
             portfolio.projects
@@ -229,7 +229,9 @@ function PortfolioPreview() {
           </div>
 
           {/* Profile Image */}
-          {data?.profileImage && (
+          {data?.profileImage &&
+          !data.profileImage.startsWith("blob:") && (
+
             <img
               src={data.profileImage}
               alt="Profile"
@@ -240,6 +242,7 @@ function PortfolioPreview() {
                 objectFit: "cover"
               }}
             />
+
           )}
 
           <h2 className="fw-bold">
@@ -274,6 +277,42 @@ function PortfolioPreview() {
               {data?.views || 0}
             </p>
 
+            <p>
+              <strong>💻 GitHub:</strong>{" "}
+
+              <a
+                href={data?.github}
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub Profile
+              </a>
+            </p>
+
+            <p>
+              <strong>💼 LinkedIn:</strong>{" "}
+
+              <a
+                href={data?.linkedin}
+                target="_blank"
+                rel="noreferrer"
+              >
+                LinkedIn Profile
+              </a>
+            </p>
+
+            <p>
+              <strong>📄 Resume:</strong>{" "}
+
+              <a
+                href={data?.resume}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View Resume
+              </a>
+            </p>
+
           </div>
 
           {/* Projects */}
@@ -289,10 +328,7 @@ function PortfolioPreview() {
               ? data.projects
               : []
             ).map(
-              (
-                project,
-                index
-              ) => (
+              (project, index) => (
 
                 <li
                   key={index}
