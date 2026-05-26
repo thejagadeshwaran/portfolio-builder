@@ -1,16 +1,13 @@
 import {
- useEffect,
- useState
-}
-from "react";
+  useEffect,
+  useState
+} from "react";
 
-import axios
-from "axios";
+import axios from "axios";
 
 import {
- useParams
-}
-from "react-router-dom";
+  useParams
+} from "react-router-dom";
 
 import Navbar
 from "../components/Navbar";
@@ -18,97 +15,114 @@ from "../components/Navbar";
 function PublicPortfolio() {
 
   const { username } =
-  useParams();
+    useParams();
 
   const [data,
-  setData] =
-  useState(null);
+    setData] =
+    useState(null);
 
   const [repos,
-  setRepos] =
-  useState([]);
+    setRepos] =
+    useState([]);
 
   // Fetch GitHub Repositories
   const fetchGitHubRepos =
-  async (
-githubUsername
-  ) => {
-
-    try {
-
-      const response =
-      await axios.get(
-`https:/api.github.com/users/${githubUsername}/repos`
-      );
-
-      setRepos(
-response.data
-      );
-
-    } catch (error) {
-
-      console.error(error);
-    }
-  };
-
-  // Load Portfolio + Views
-  useEffect(() => {
-
-    const loadPortfolio =
-    async () => {
+    async (
+      githubUsername
+    ) => {
 
       try {
 
-        // Check already viewed
-        const viewed =
-        sessionStorage.getItem(
-`viewed-${username}`
-        );
-
-        // Increase only once
-        if (!viewed) {
-
-          await axios.put(
-`https://portfolio-builder-jxjx.onrender.com/api/portfolio/view/${username}`
-          );
-
-          sessionStorage.setItem(
-`viewed-${username}`,
-"true"
-          );
-        }
-
-        // Fetch updated profile
         const response =
-        await axios.get(
-`https://portfolio-builder-jxjx.onrender.com/api/portfolio/user/${username}`
-        );
-
-        setData(
-response.data
-        );
-
-        // GitHub repos
-        if (
-response.data
-?.githubUsername
-        ) {
-
-          fetchGitHubRepos(
-response.data
-.githubUsername
+          await axios.get(
+            `https://api.github.com/users/${githubUsername}/repos`
           );
-        }
+
+        setRepos(
+          Array.isArray(
+            response.data
+          )
+            ? response.data
+            : []
+        );
 
       } catch (error) {
 
         console.error(error);
 
-        alert(
-"Portfolio not found"
-        );
+        setRepos([]);
       }
     };
+
+  // Load Portfolio + Views
+  useEffect(() => {
+
+    const loadPortfolio =
+      async () => {
+
+        try {
+
+          // Check already viewed
+          const viewed =
+            sessionStorage.getItem(
+              `viewed-${username}`
+            );
+
+          // Increase view only once
+          if (!viewed) {
+
+            await axios.put(
+              `https://portfolio-builder-jxjx.onrender.com/api/portfolio/view/${username}`
+            );
+
+            sessionStorage.setItem(
+              `viewed-${username}`,
+              "true"
+            );
+          }
+
+          // Fetch Portfolio
+          const response =
+            await axios.get(
+              `https://portfolio-builder-jxjx.onrender.com/api/portfolio/user/${username}`
+            );
+
+          const portfolio =
+            response.data || {};
+
+          // Safe projects fix
+          portfolio.projects =
+            Array.isArray(
+              portfolio.projects
+            )
+              ? portfolio.projects
+              : [];
+
+          setData(
+            portfolio
+          );
+
+          // GitHub repos
+          if (
+            portfolio
+              ?.githubUsername
+          ) {
+
+            fetchGitHubRepos(
+              portfolio
+                .githubUsername
+            );
+          }
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "Portfolio not found"
+          );
+        }
+      };
 
     loadPortfolio();
 
@@ -122,7 +136,7 @@ response.data
       <div className="text-center mt-5">
 
         <h2>
-Loading...
+          Loading...
         </h2>
 
       </div>
@@ -138,16 +152,19 @@ Loading...
         <div className="card shadow-lg border-0 rounded-4 p-4 text-center">
 
           {/* Profile Image */}
-          <img
-src={data?.profileImage}
-alt="Profile"
-width="180"
-height="180"
-className="rounded-circle border shadow mb-3"
-style={{
-objectFit: "cover"
-}}
-          />
+          {data?.profileImage && (
+
+            <img
+              src={data.profileImage}
+              alt="Profile"
+              width="180"
+              height="180"
+              className="rounded-circle border shadow mb-3"
+              style={{
+                objectFit: "cover"
+              }}
+            />
+          )}
 
           <h2 className="fw-bold">
             {data?.fullName}
@@ -162,73 +179,73 @@ objectFit: "cover"
           <div className="text-start">
 
             <p>
-<strong>
-📞 Phone:
-</strong>{" "}
-{data?.phone}
+              <strong>
+                📞 Phone:
+              </strong>{" "}
+              {data?.phone || "N/A"}
             </p>
 
             <p>
-<strong>
-📝 About:
-</strong>{" "}
-{data?.about}
+              <strong>
+                📝 About:
+              </strong>{" "}
+              {data?.about || "N/A"}
             </p>
 
             <p>
-<strong>
-🛠 Skills:
-</strong>{" "}
-{data?.skills}
+              <strong>
+                🛠 Skills:
+              </strong>{" "}
+              {data?.skills || "N/A"}
             </p>
 
             <p>
-<strong>
-👀 Views:
-</strong>{" "}
-{data?.views || 0}
+              <strong>
+                👀 Views:
+              </strong>{" "}
+              {data?.views || 0}
             </p>
 
             <p>
-<strong>
-💻 GitHub:
-</strong>{" "}
+              <strong>
+                💻 GitHub:
+              </strong>{" "}
 
-<a
-href={data?.github}
-target="_blank"
-rel="noreferrer"
->
-GitHub Profile
-</a>
+              <a
+                href={data?.github}
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub Profile
+              </a>
             </p>
 
             <p>
-<strong>
-💼 LinkedIn:
-</strong>{" "}
+              <strong>
+                💼 LinkedIn:
+              </strong>{" "}
 
-<a
-href={data?.linkedin}
-target="_blank"
-rel="noreferrer"
->
-LinkedIn Profile
-</a>
+              <a
+                href={data?.linkedin}
+                target="_blank"
+                rel="noreferrer"
+              >
+                LinkedIn Profile
+              </a>
             </p>
 
             <p>
-<strong>
-📄 Resume:
-</strong>{" "}
+              <strong>
+                📄 Resume:
+              </strong>{" "}
 
-<a
-href={data?.resume}
-target="_blank"
-rel="noreferrer"
->
-View Resume
-</a>
+              <a
+                href={data?.resume}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View Resume
+              </a>
             </p>
 
           </div>
@@ -240,16 +257,24 @@ View Resume
 
           <ul className="list-group mb-4">
 
-            {data?.projects?.map(
-(project, index) => (
+            {(Array.isArray(
+              data?.projects
+            )
+              ? data.projects
+              : []
+            ).map(
+              (
+                project,
+                index
+              ) => (
 
-              <li
-key={index}
-className="list-group-item"
-              >
-                {project}
-              </li>
-            ))}
+                <li
+                  key={index}
+                  className="list-group-item"
+                >
+                  {project}
+                </li>
+              ))}
 
           </ul>
 
@@ -260,24 +285,31 @@ className="list-group-item"
 
           <ul className="list-group">
 
-            {repos.map(
-(repo) => (
+            {(Array.isArray(
+              repos
+            )
+              ? repos
+              : []
+            ).map(
+              (
+                repo
+              ) => (
 
-              <li
-key={repo.id}
-className="list-group-item"
-              >
-
-                <a
-href={repo.html_url}
-target="_blank"
-rel="noreferrer"
+                <li
+                  key={repo.id}
+                  className="list-group-item"
                 >
-                  {repo.name}
-                </a>
 
-              </li>
-            ))}
+                  <a
+                    href={repo.html_url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {repo.name}
+                  </a>
+
+                </li>
+              ))}
 
           </ul>
 
