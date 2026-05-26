@@ -15,7 +15,10 @@ const authRoutes =
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  credentials: true
+}));
 app.use(express.json());
 
 // Uploads Folder Access
