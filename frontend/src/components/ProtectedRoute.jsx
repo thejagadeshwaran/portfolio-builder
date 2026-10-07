@@ -1,24 +1,20 @@
-import {
- Navigate
-} from
-"react-router-dom";
+// frontend/src/components/ProtectedRoute.jsx
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import LoadingSpinner from "./LoadingSpinner";
 
-function
-ProtectedRoute({
-children
-}) {
+function ProtectedRoute({ children }) {
+  const { user, loading } = useAuth();
 
-  const token =
-localStorage.getItem(
-"token"
-  );
+  if (loading) {
+    return <LoadingSpinner message="Checking authentication..." />;
+  }
 
-  return token
-    ? children
-    : <Navigate
-to="/login"
-/>;
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
 }
 
-export default
-ProtectedRoute;
+export default ProtectedRoute;

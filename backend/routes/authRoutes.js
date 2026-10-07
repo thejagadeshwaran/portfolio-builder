@@ -1,167 +1,171 @@
-const express =
-require("express");
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const bcrypt =
-require("bcryptjs");
+const router = express.Router();
+const User = require("../models/User");
 
-const jwt =
-require("jsonwebtoken");
+// Create JWT
+const createToken = (userId) => {
+  return jwt.sign(
+    {
+      id: userId,
+    },
+    process.env.JWT_SECRET || "secretKey123",
+    {
+      expiresIn: "1d",
+    }
+  );
+};
 
-const router =
-express.Router();
+// ========================================
+// REGISTER
+// POST /api/auth/register
+// ========================================
 
-const User =
-require("../models/User");
-
-// =======================
-// Register
-// =======================
-
-router.post(
-"/register",
-async (req, res) => {
-
+router.post("/register", async (req, res) => {
   try {
+    console.log("REGISTER REQUEST:", req.body);
 
     const {
       name,
+      fullName,
       email,
-      password
+      password,
     } = req.body;
 
-    const existingUser =
-    await User.findOne({
-      email
-    });
+    const userName = name || fullName;
 
-    if (existingUser) {
-
-      return res
-      .status(400)
-      .json({
-message:
-"User already exists"
+    // Validation
+    if (!userName || !email || !password) {
+      return res.status(400).json({
+        message:
+          "Name, email, and password are required",
       });
     }
 
-    const hashedPassword =
-    await bcrypt.hash(
+    if (password.length < 6) {
+      return res.status(400).json({
+        message:
+          "Password must contain at least 6 characters",
+      });
+    }
+
+    // Check existing user
+    const normalizedEmail = email
+      .trim()
+      .toLowerCase();
+
+    const existingUser = await User.findOne({
+      email: normalizedEmail,
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "User already exists",
+      });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(
       password,
       10
     );
 
-    const user =
-    new User({
-
-      name,
-      email,
-
-password:
-hashedPassword
-
+    // Create user
+    const user = new User({
+      name: userName.trim(),
+      email: normalizedEmail,
+      password: hashedPassword,
     });
 
     await user.save();
 
-    res.status(201)
-    .json({
+    // Create token
+    const token = createToken(user._id);
 
-message:
-"User registered successfully"
+    console.log(
+      "USER REGISTERED:",
+      user._id.toString()
+    );
 
+    // Response
+    return res.status(201).json({
+      message: "User registered successfully",
+      token,
+      userId: user._id.toString(),
     });
-
   } catch (error) {
+    console.error(
+      "REGISTER ERROR:",
+      error
+    );
 
-    res.status(500)
-    .json({
-error:
-error.message
+    return res.status(500).json({
+      message: "Server error during registration",
+      error: error.message,
     });
   }
 });
 
-// =======================
-// Login
-// =======================
+// ========================================
+// LOGIN
+// POST /api/auth/login
+// ========================================
 
-router.post(
-"/login",
-async (req, res) => {
-
+router.post("/login", async (req, res) => {
   try {
+    const { email, password } = req.body;
 
-    const {
-      email,
-      password
-    } = req.body;
-
-    const user =
-    await User.findOne({
-      email
-    });
-
-    if (!user) {
-
-      return res
-      .status(400)
-      .json({
-message:
-"User not found"
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Email and password are required",
       });
     }
 
-    const isMatch =
-    await bcrypt.compare(
+    const normalizedEmail = email
+      .trim()
+      .toLowerCase();
 
+    const user = await User.findOne({
+      email: normalizedEmail,
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(
       password,
-
       user.password
     );
 
     if (!isMatch) {
-
-      return res
-      .status(400)
-      .json({
-message:
-"Wrong password"
+      return res.status(400).json({
+        message: "Wrong password",
       });
     }
 
-    const token =
-    jwt.sign(
+    const token = createToken(user._id);
 
-      {
-id: user._id
-      },
-
-      "secretKey",
-
-      {
-expiresIn: "1d"
-      }
+    return res.status(200).json({
+      token,
+      userId: user._id.toString(),
+      message: "Login successful",
+    });
+  } catch (error) {
+    console.error(
+      "LOGIN ERROR:",
+      error
     );
 
-    res.status(200)
-    .json({
-
-      token,
-
-message:
-"Login successful"
-
-    });
-
-  } catch (error) {
-
-    res.status(500)
-    .json({
-error:
-error.message
+    return res.status(500).json({
+      message: "Server error during login",
+      error: error.message,
     });
   }
 });
 
-module.exports =
-router;
+module.exports = router;

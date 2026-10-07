@@ -1,50 +1,320 @@
-const mongoose =
-  require("mongoose");
+const mongoose = require("mongoose");
 
-const portfolioSchema =
-  new mongoose.Schema({
+const portfolioSchema = new mongoose.Schema(
+  {
+    // ==================== OWNER ====================
 
-    fullName: String,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
 
-    username: String,
+    // ==================== PORTFOLIO ====================
 
-    about: String,
+    portfolioTitle: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-    skills: String,
+    fullName: {
+      type: String,
+      default: "",
+      trim: true,
+    },
 
-    github: String,
+    username: {
+      type: String,
+      default: "",
+      trim: true,
+      lowercase: true,
+    },
 
-    githubUsername:
-      String,
+    email: {
+      type: String,
+      default: "",
+      trim: true,
+    },
 
-    linkedin: String,
+    about: {
+      type: String,
+      default: "",
+    },
 
-    phone: String,
+    // IMPORTANT:
+    // AI Resume Parser sends skills as an array.
+    skills: {
+      type: [String],
+      default: [],
+    },
 
-    profileImage:
-      String,
+    github: {
+      type: String,
+      default: "",
+      trim: true,
+    },
 
-    resume: String,
+    githubUsername: {
+      type: String,
+      default: "",
+      trim: true,
+    },
 
-    // New Analytics Fields
+    linkedin: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    profileImage: {
+      type: String,
+      default: "",
+    },
+
+    resume: {
+      type: String,
+      default: "",
+    },
+
+    // ==================== ANALYTICS ====================
+
     views: {
       type: Number,
-      default: 0
+      default: 0,
+      min: 0,
     },
 
     resumeDownloads: {
       type: Number,
-      default: 0
+      default: 0,
+      min: 0,
     },
 
-    projects: [String],
+    githubClicks: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
 
-    theme: String
+    contactMessages: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
 
-  });
+    lastUpdated: {
+      type: Date,
+      default: Date.now,
+    },
 
-module.exports =
-  mongoose.model(
-    "Portfolio",
-    portfolioSchema
-  );
+    // ==================== PROJECTS ====================
+
+    projects: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: [],
+    },
+
+    // ==================== WORK EXPERIENCE ====================
+
+    experience: {
+      type: [
+        {
+          company: {
+            type: String,
+            default: "",
+          },
+
+          role: {
+            type: String,
+            default: "",
+          },
+
+          employmentType: {
+            type: String,
+            default: "",
+          },
+
+          location: {
+            type: String,
+            default: "",
+          },
+
+          startDate: {
+            type: String,
+            default: "",
+          },
+
+          endDate: {
+            type: String,
+            default: "",
+          },
+
+          currentlyWorking: {
+            type: Boolean,
+            default: false,
+          },
+
+          description: {
+            type: String,
+            default: "",
+          },
+        },
+      ],
+
+      default: [],
+    },
+
+    // ==================== EDUCATION ====================
+
+    education: {
+      type: [
+        {
+          institution: {
+            type: String,
+            default: "",
+          },
+
+          degree: {
+            type: String,
+            default: "",
+          },
+
+          fieldOfStudy: {
+            type: String,
+            default: "",
+          },
+
+          startYear: {
+            type: String,
+            default: "",
+          },
+
+          endYear: {
+            type: String,
+            default: "",
+          },
+
+          cgpa: {
+            type: String,
+            default: "",
+          },
+
+          description: {
+            type: String,
+            default: "",
+          },
+        },
+      ],
+
+      default: [],
+    },
+
+    // ==================== CERTIFICATIONS ====================
+
+    certifications: {
+      type: [
+        {
+          name: {
+            type: String,
+            default: "",
+          },
+
+          issuer: {
+            type: String,
+            default: "",
+          },
+
+          issueDate: {
+            type: String,
+            default: "",
+          },
+
+          credentialId: {
+            type: String,
+            default: "",
+          },
+
+          certificateLink: {
+            type: String,
+            default: "",
+          },
+        },
+      ],
+
+      default: [],
+    },
+
+    // ==================== ACHIEVEMENTS ====================
+
+    achievements: {
+      type: [
+        {
+          title: {
+            type: String,
+            default: "",
+          },
+
+          date: {
+            type: String,
+            default: "",
+          },
+
+          description: {
+            type: String,
+            default: "",
+          },
+        },
+      ],
+
+      default: [],
+    },
+
+    // ==================== SEO ====================
+
+    seo: {
+      title: {
+        type: String,
+        default: "",
+      },
+
+      description: {
+        type: String,
+        default: "",
+      },
+
+      keywords: {
+        type: String,
+        default: "",
+      },
+
+      ogImage: {
+        type: String,
+        default: "",
+      },
+    },
+
+    // ==================== THEME ====================
+
+    theme: {
+      type: String,
+      default: "modern",
+      trim: true,
+    },
+  },
+
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = mongoose.model(
+  "Portfolio",
+  portfolioSchema
+);
