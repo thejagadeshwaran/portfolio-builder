@@ -12,7 +12,7 @@ import { parseResume } from "../services/aiService";
 // API URL
 // ========================================
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://portfolio-builder-online.onrender.com/api";
 
 // ========================================
 // DEFAULT PORTFOLIO DATA

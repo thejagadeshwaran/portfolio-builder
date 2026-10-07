@@ -4,7 +4,7 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://portfolio-builder-online.onrender.com/api";
 
 function Dashboard() {
   const navigate = useNavigate();
