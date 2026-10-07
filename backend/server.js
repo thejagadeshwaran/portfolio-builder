@@ -92,7 +92,7 @@ console.log("========================================");
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "localhost:3000",
     credentials: true,
   })
 );
@@ -399,7 +399,7 @@ app.listen(
     console.log("========================================");
 
     console.log(
-      `🚀 Server running on http://localhost:${PORT}`
+      `🚀 Server running on localhost:${PORT}`
     );
 
     console.log("========================================");
