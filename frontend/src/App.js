@@ -53,7 +53,7 @@ function App() {
         {/* =================================================
             PUBLIC PORTFOLIO
             Example:
-            http://localhost:3000/portfolio/demo
+            localhost:3000/portfolio/demo
         ================================================= */}
 
         <Route

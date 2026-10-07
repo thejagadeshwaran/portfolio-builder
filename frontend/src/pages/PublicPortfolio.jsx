@@ -122,7 +122,7 @@ function PublicPortfolio() {
   const normalizeUrl = (url) => {
     if (!url) return "";
     const value = String(url).trim();
-    if (value.startsWith("http://") || value.startsWith("https://")) {
+    if (value.startsWith("") || value.startsWith("https://")) {
       return value;
     }
     return `https://${value}`;
@@ -131,7 +131,7 @@ function PublicPortfolio() {
   const getResumeUrl = useCallback(() => {
     if (!data?.resume) return "";
     const resume = String(data.resume).trim();
-    if (resume.startsWith("http://") || resume.startsWith("https://")) {
+    if (resume.startsWith("") || resume.startsWith("https://")) {
       return resume;
     }
     return `https://portfolio-builder-online.onrender.com${resume.startsWith("/") ? "" : "/"}${resume}`;
