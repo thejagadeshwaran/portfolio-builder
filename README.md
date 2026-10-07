@@ -8,7 +8,7 @@ A full-stack Portfolio Builder web application that enables users to create, edi
 https://portfolio-builder-navy-eight.vercel.app/
 
 ### Backend (Render)
-http://localhost:5000
+http://https://portfolio-builder-online.onrender.com
 
 ---
 
@@ -176,7 +176,7 @@ https://www.linkedin.com/in/thejagadeshwaran/
 
 **Portfolio Builder Live**  
 Frontend: https://portfolio-builder-navy-eight.vercel.app/  
-Backend: http://localhost:5000
+Backend: http://https://portfolio-builder-online.onrender.com
 
 ---
 
