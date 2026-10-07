@@ -8,7 +8,7 @@ import axios from "axios";
 
 const API_URL =
   process.env.REACT_APP_API_URL ||
-  "http://https://portfolio-builder-online.onrender.com/api";
+  "https://portfolio-builder-online.onrender.com/api";
 
 // ========================================
 // PARSE RESUME USING BACKEND AI API

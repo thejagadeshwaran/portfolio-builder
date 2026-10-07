@@ -134,7 +134,7 @@ function PublicPortfolio() {
     if (resume.startsWith("http://") || resume.startsWith("https://")) {
       return resume;
     }
-    return `http://https://portfolio-builder-online.onrender.com${resume.startsWith("/") ? "" : "/"}${resume}`;
+    return `https://portfolio-builder-online.onrender.com${resume.startsWith("/") ? "" : "/"}${resume}`;
   }, [data]);
 
   const getGitHubUrl = useCallback(() => {

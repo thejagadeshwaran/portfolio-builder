@@ -52,7 +52,7 @@ function PortfolioPreview() {
   const trackResumeDownload = async (portfolioId) => {
     if (!portfolioId) return;
     try {
-      await axios.put(`http://https://portfolio-builder-online.onrender.com/api/portfolio/download/${portfolioId}`);
+      await axios.put(`https://portfolio-builder-online.onrender.com/api/portfolio/download/${portfolioId}`);
     } catch (error) {
       console.error("❌ Failed to track resume download:", error);
     }
@@ -61,7 +61,7 @@ function PortfolioPreview() {
   const trackGitHubClick = async (portfolioId) => {
     if (!portfolioId) return;
     try {
-      await axios.put(`http://https://portfolio-builder-online.onrender.com/api/portfolio/github/${portfolioId}`);
+      await axios.put(`https://portfolio-builder-online.onrender.com/api/portfolio/github/${portfolioId}`);
     } catch (error) {
       console.error("❌ Failed to track GitHub click:", error);
     }
@@ -93,7 +93,7 @@ function PortfolioPreview() {
       setMessageStatus("");
 
       await axios.post(
-        `http://https://portfolio-builder-online.onrender.com/api/portfolio/contact/${data._id}`,
+        `https://portfolio-builder-online.onrender.com/api/portfolio/contact/${data._id}`,
         {
           name: contactForm.name.trim(),
           email: contactForm.email.trim(),
@@ -127,7 +127,7 @@ function PortfolioPreview() {
       }
 
       const response = await axios.get(
-        `http://https://portfolio-builder-online.onrender.com/api/portfolio/${portfolioId}`
+        `https://portfolio-builder-online.onrender.com/api/portfolio/${portfolioId}`
       );
 
       const portfolio = response.data || {};
@@ -365,7 +365,7 @@ function PortfolioPreview() {
               )}
               {data.resume && (
                 <a
-                  href={data.resume.startsWith("http") ? data.resume : `http://https://portfolio-builder-online.onrender.com${data.resume}`}
+                  href={data.resume.startsWith("http") ? data.resume : `https://portfolio-builder-online.onrender.com${data.resume}`}
                   target="_blank"
                   rel="noreferrer"
                   className="btn btn-outline-danger btn-action"

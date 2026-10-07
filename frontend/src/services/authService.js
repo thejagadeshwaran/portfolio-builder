@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  import.meta.env.VITE_API_URL || "http://https://portfolio-builder-online.onrender.com/api";
+  import.meta.env.VITE_API_URL || "https://portfolio-builder-online.onrender.com/api";
 
 export const authService = {
   // Login

@@ -28,7 +28,7 @@ function Analytics() {
       }
 
       const response = await axios.get(
-        `http://https://portfolio-builder-online.onrender.com/api/portfolio/user/${savedPortfolio.username}`
+        `https://portfolio-builder-online.onrender.com/api/portfolio/user/${savedPortfolio.username}`
       );
 
       setPortfolio(response.data);
