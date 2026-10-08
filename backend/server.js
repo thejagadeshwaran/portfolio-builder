@@ -90,12 +90,64 @@ console.log("========================================");
 // MIDDLEWARE
 // =====================================================
 
+// =====================================================
+// CORS CONFIGURATION
+// =====================================================
+
+// Local development frontend
+// Production Vercel frontend
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://portfolio-builder-mu-hazel.vercel.app",
+];
+
 app.use(
   cors({
-    origin: "localhost:3000",
+    origin: function (origin, callback) {
+      // Allow requests without an Origin header.
+      // Example: Postman or server-to-server requests.
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      // Allow known frontend origins
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Block unknown origins
+      console.log(
+        "❌ CORS BLOCKED ORIGIN:",
+        origin
+      );
+
+      return callback(
+        new Error("Not allowed by CORS")
+      );
+    },
+
     credentials: true,
+
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS",
+    ],
+
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+    ],
   })
 );
+
+// =====================================================
+// BODY PARSERS
+// =====================================================
 
 app.use(express.json());
 
@@ -238,12 +290,16 @@ app.get(
       ) {
         return res.status(500).json({
           success: false,
+
           message:
             "Cloudinary credentials are missing",
+
           cloudName:
             !!cloudName,
+
           apiKey:
             !!apiKey,
+
           apiSecret:
             !!apiSecret,
         });
@@ -264,11 +320,17 @@ app.get(
       // SUCCESS
       // ---------------------------------------------
 
-      console.log("========================================");
+      console.log(
+        "========================================"
+      );
+
       console.log(
         "✅ CLOUDINARY CONNECTION SUCCESSFUL"
       );
-      console.log("========================================");
+
+      console.log(
+        "========================================"
+      );
 
       console.log(
         "Cloudinary response:",
@@ -277,21 +339,28 @@ app.get(
 
       return res.status(200).json({
         success: true,
+
         message:
           "Cloudinary connection successful",
+
         result: result,
       });
-
     } catch (error) {
       // -------------------------------------------
       // ERROR
       // -------------------------------------------
 
-      console.log("========================================");
+      console.log(
+        "========================================"
+      );
+
       console.log(
         "❌ CLOUDINARY CONNECTION FAILED"
       );
-      console.log("========================================");
+
+      console.log(
+        "========================================"
+      );
 
       console.log(
         "Full error:",
@@ -382,6 +451,7 @@ app.use(
       error.status || 500
     ).json({
       success: false,
+
       message:
         error.message ||
         "Internal Server Error",
@@ -396,12 +466,16 @@ app.use(
 app.listen(
   PORT,
   () => {
-    console.log("========================================");
-
     console.log(
-      `🚀 Server running on localhost:${PORT}`
+      "========================================"
     );
 
-    console.log("========================================");
+    console.log(
+      `🚀 Server running on port ${PORT}`
+    );
+
+    console.log(
+      "========================================"
+    );
   }
 );
