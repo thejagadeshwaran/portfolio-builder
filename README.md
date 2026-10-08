@@ -1,185 +1,109 @@
 # 🚀 Portfolio Builder
 
-A full-stack Portfolio Builder web application that enables users to create, edit, manage, and share professional portfolios online.
+A modern **Full-Stack Portfolio Builder** that allows users to create, customize, manage, and share professional portfolios online.
+
+The application includes **JWT authentication, AI-powered resume parsing, Cloudinary image/file uploads, portfolio analytics, public portfolio sharing, search, and contact messaging**.
+
+---
 
 ## 🌐 Live Demo
 
-### Frontend (Vercel)
-https://portfolio-builder-navy-eight.vercel.app/
-
-### Backend (Render)
-http://https://portfolio-builder-online.onrender.com
-
----
-
-## 📌 Features
-
-✅ User Registration & Login (JWT Authentication)  
-✅ Secure Protected Routes  
-✅ Create & Edit Portfolio  
-✅ Public Portfolio Sharing  
-✅ Profile Image Upload  
-✅ Resume Upload  
-✅ Skills, Education & Projects Section  
-✅ Portfolio Search by Username  
-✅ Portfolio Analytics (View Count)  
-✅ Responsive UI Design  
-
----
-
-## 🛠 Technologies Used
-
 ### Frontend
-- React.js
-- React Router DOM
-- Axios
-- Bootstrap
+https://portfolio-builder-mu-hazel.vercel.app/
 
-### Backend
+### Backend API
+https://portfolio-builder-online.onrender.com/
+
+---
+
+## ✨ Features
+
+- 🔐 User Registration & Login
+- 🔑 JWT Authentication
+- 👤 User Profile Management
+- 📝 Create & Edit Portfolios
+- 🎨 Portfolio Customization
+- 📱 Responsive Portfolio Design
+- 📄 Resume Upload
+- 🤖 AI Resume Parsing
+- ☁️ Cloudinary File/Image Upload
+- 🔍 Portfolio Search
+- 🌍 Public Portfolio Sharing
+- 📊 Portfolio Analytics
+- 👀 Portfolio View Tracking
+- 📥 Resume Download Tracking
+- 📨 Contact Message System
+- 📧 Email Notifications
+- 🔗 GitHub Click Tracking
+- 💾 MongoDB Database
+- 🔒 Password Hashing with bcrypt
+- 🚀 Vercel Frontend Deployment
+- 🚀 Render Backend Deployment
+
+---
+
+# 🛠️ Tech Stack
+
+## Frontend
+
+- React.js
+- JavaScript
+- HTML5
+- CSS3
+- Bootstrap
+- Tailwind CSS
+- Axios
+- React Router
+
+## Backend
+
 - Node.js
 - Express.js
-- JWT Authentication
-- Multer (File Upload)
-
-### Database
-- MongoDB Atlas
+- MongoDB
 - Mongoose
+- JWT
+- bcrypt
+- Nodemailer
+- Multer
+
+## AI & Cloud
+
+- Google Gemini API
+- Cloudinary
+
+## Deployment
+
+- Vercel
+- Render
+- MongoDB Atlas
 
 ---
 
-## 📂 Project Structure
+# 🏗️ Project Architecture
 
 ```text
-Portfolio_Builder/
-│── frontend/
-│   ├── src/
-│   ├── components/
-│   ├── pages/
-│
-│── backend/
-│   ├── routes/
-│   ├── models/
-│   ├── uploads/
-│   ├── server.js
-```
-
----
-
-## 🔐 Authentication
-
-Implemented secure authentication using **JWT (JSON Web Token)**:
-
-- Register User
-- Login User
-- Protected Routes
-- Logout Functionality
-
----
-
-## 📷 File Uploads
-
-Users can upload:
-
-- Profile Image
-- Resume PDF
-
-Files are stored in:
-
-```text
-backend/uploads/
-```
-
-The file URL is stored in **MongoDB Atlas**.
-
----
-
-## 🌐 REST API Endpoints
-
-### Authentication APIs
-
-```http
-POST /api/auth/register
-POST /api/auth/login
-```
-
-### Portfolio APIs
-
-```http
-POST   /api/portfolio/save
-GET    /api/portfolio/user/:username
-GET    /api/portfolio/search/:username
-PUT    /api/portfolio/view/:username
-PUT    /api/portfolio/update/:id
-DELETE /api/portfolio/delete/:id
-POST   /api/portfolio/upload-resume
-POST   /api/portfolio/upload-profile
-```
-
----
-
-## ⚙️ Installation
-
-### Clone Repository
-
-```bash
-git clone https://github.com/thejagadeshwaran
-```
-
-### Install Frontend
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-### Install Backend
-
-```bash
-cd backend
-npm install
-npm start
-```
-
----
-
-## 🔑 Environment Variables
-
-Create a `.env` file inside backend folder:
-
-```env
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-```
-
----
-
-## 🎯 Future Improvements
-
-- Cloudinary Image Storage
-- Multiple Portfolio Themes
-- Dark Mode
-- Better Analytics Dashboard
-- Portfolio PDF Export
-
----
-
-## 👨‍💻 Author
-
-### Jagadeshwaran J
-
-**GitHub**  
-https://github.com/thejagadeshwaran
-
-**LinkedIn**  
-https://www.linkedin.com/in/thejagadeshwaran/
-
-**Portfolio Builder Live**  
-Frontend: https://portfolio-builder-navy-eight.vercel.app/  
-Backend: http://https://portfolio-builder-online.onrender.com
-
----
-
-## ⭐ Support
-
-If you like this project, give it a ⭐ on GitHub!
+                    ┌──────────────────────┐
+                    │       User           │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │   React Frontend     │
+                    │      Vercel          │
+                    └──────────┬───────────┘
+                               │
+                         REST API
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │   Express Backend    │
+                    │       Render         │
+                    └──────────┬───────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+              ▼                ▼                ▼
+       ┌────────────┐   ┌────────────┐   ┌────────────┐
+       │  MongoDB   │   │ Cloudinary │   │ Gemini API │
+       │   Atlas    │   │   Storage  │   │     AI     │
+       └────────────┘   └────────────┘   └────────────┘
